@@ -12,6 +12,17 @@ const state = {
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
+function animateEntry(element) {
+  if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  element.animate(
+    [
+      { opacity: 0, transform: "translateY(18px) scale(.99)" },
+      { opacity: 1, transform: "translateY(0) scale(1)" },
+    ],
+    { duration: 420, easing: "cubic-bezier(.2,.75,.25,1)" },
+  );
+}
+
 function showToast(message) {
   const toast = $("#toast");
   toast.textContent = message;
@@ -53,6 +64,13 @@ function formatClock(totalSeconds, tenths = false) {
 function setView(view) {
   $$(".nav-link").forEach((link) => link.classList.toggle("active", link.dataset.view === view));
   $$(".view").forEach((section) => section.classList.toggle("active", section.id === `view-${view}`));
+  animateEntry($(`#view-${view}`));
+  if (window.scrollY > 0) {
+    window.scrollTo({
+      top: 0,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
+  }
   const names = {
     dashboard: ["Welcome back", "A little focus goes a long way."],
     tasks: ["Your tasks", "Turn your plans into small, finished steps."],
@@ -474,6 +492,7 @@ $$("[data-navigate]").forEach((button) => button.addEventListener("click", () =>
 $$(".clock-tab").forEach((button) => button.addEventListener("click", () => {
   $$(".clock-tab").forEach((tab) => tab.classList.toggle("selected", tab === button));
   $$(".clock-view").forEach((view) => view.classList.toggle("active", view.id === `clock-${button.dataset.tab}`));
+  animateEntry($(`#clock-${button.dataset.tab}`));
 }));
 
 $("#theme-toggle").addEventListener("click", () => {

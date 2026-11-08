@@ -66,8 +66,7 @@ h1 { margin-bottom: 4px; font-size: clamp(27px, 3vw, 36px); letter-spacing: -.04
 .icon-button:hover { transform: rotate(12deg) scale(1.06); }
 .icon-button:active { transform: scale(.94); }
 .view { display: none; }
-.view.active { display: block; animation: appear .32s cubic-bezier(.2,.75,.25,1) both; }
-@keyframes appear { from { opacity: 0; transform: translateY(10px) scale(.995); } to { opacity: 1; transform: none; } }
+.view.active { display: block; }
 .stat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
 .stat-card, .panel { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); transition: transform .22s ease, box-shadow .22s ease, background-color .25s ease, border-color .25s ease; }
 .stat-card:hover, .panel:hover { transform: translateY(-2px); box-shadow: 0 16px 38px rgba(37, 47, 79, .1); }
@@ -142,7 +141,7 @@ input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in sr
 .clock-tab:hover { transform: translateY(-1px); }
 .clock-tab.selected { background: var(--surface); color: var(--accent); box-shadow: 0 2px 8px rgba(30,40,70,.08); }
 .clock-view { display: none; min-height: 330px; padding: 12px 0; text-align: center; }
-.clock-view.active { display: block; animation: appear .28s cubic-bezier(.2,.75,.25,1) both; }
+.clock-view.active { display: block; }
 .clock-view > .eyebrow { color: var(--accent); }
 .clock-display { display: block; margin: 11px 0 22px; font-size: clamp(44px, 8vw, 66px); font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
 .timer-fields { display: flex; justify-content: center; gap: 12px; margin: 0 auto 22px; }
@@ -175,7 +174,8 @@ input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in sr
 .app-footer { display: flex; justify-content: space-between; margin-top: 28px; padding: 13px 2px; color: var(--muted); font-size: 10px; }
 .app-footer span:first-child { font-weight: 800; letter-spacing: .12em; }
 .modal { width: min(460px, calc(100vw - 28px)); padding: 25px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); color: var(--text); box-shadow: 0 25px 80px rgba(0,0,0,.24); }
-.modal[open] { animation: appear .22s ease-out both; }
+.modal[open] { animation: modal-appear .22s ease-out both; }
+@keyframes modal-appear { from { opacity: 0; transform: translateY(8px) scale(.99); } to { opacity: 1; transform: none; } }
 .modal::backdrop { background: rgba(14,20,37,.55); backdrop-filter: blur(3px); }
 .modal-heading h2 { margin: 3px 0; font-size: 24px; }
 .modal-heading .eyebrow { color: var(--accent); }
