@@ -2,18 +2,12 @@ services:
   - type: web
     name: focus-desk
     runtime: python
-    plan: starter
+    plan: free
     buildCommand: python -m compileall -q web_app.py focus_backend.py productivity_model.py
     startCommand: python web_app.py
-    disk:
-      name: focus-desk-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       - key: HOST
         value: 0.0.0.0
-      - key: FOCUS_DATA_PATH
-        value: /var/data/focus.json
       - key: FOCUS_REQUIRE_AUTH
         value: "true"
       - key: FOCUS_AUTH_USER
