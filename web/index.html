@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Focus Desk</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" aria-label="Focus Desk home">
+        <span class="brand-mark">F</span>
+        <span><strong>FOCUS</strong><small>DESK</small></span>
+      </a>
+      <p class="nav-caption">WORKSPACE</p>
+      <nav class="navigation" aria-label="Main navigation">
+        <a class="nav-link active" href="#dashboard" data-view="dashboard"><span>▦</span>Overview</a>
+        <a class="nav-link" href="#tasks" data-view="tasks"><span>✓</span>Tasks</a>
+        <a class="nav-link" href="#focus" data-view="focus"><span>◉</span>Focus</a>
+        <a class="nav-link" href="#clock" data-view="clock"><span>◷</span>Clock tools</a>
+        <a class="nav-link" href="#reports" data-view="reports"><span>◈</span>Reports</a>
+      </nav>
+      <button class="profile-chip" id="open-profile" type="button">
+        <span class="avatar" id="avatar">?</span>
+        <span class="profile-chip-copy"><strong id="profile-name">Your profile</strong><small id="profile-bio">Add a name and bio</small></span>
+        <span class="profile-edit" aria-hidden="true">↗</span>
+      </button>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">YOUR PERSONAL STUDY SPACE</p>
+          <h1 id="page-title">Welcome back</h1>
+          <p class="subtitle" id="page-subtitle">A little focus goes a long way.</p>
+        </div>
+        <div class="topbar-actions">
+          <span class="date-pill" id="today-date"></span>
+          <button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle color theme">☾</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="stat-grid">
+          <article class="stat-card accent-violet"><span class="stat-icon">◷</span><p>FOCUS TODAY</p><strong id="stat-focus">0m</strong><small>Completed sessions</small></article>
+          <article class="stat-card accent-green"><span class="stat-icon">✓</span><p>TASKS DONE</p><strong id="stat-tasks">0 / 0</strong><small id="stat-tasks-caption">0 remaining</small></article>
+          <article class="stat-card accent-orange"><span class="stat-icon">◎</span><p>DAILY GOAL</p><strong id="stat-goal">120m</strong><small>Completed focus target</small></article>
+        </div>
+        <div class="content-grid">
+          <section class="panel task-panel">
+            <div class="panel-heading"><div><p class="eyebrow">MAKE TODAY COUNT</p><h2>Today's tasks</h2></div><span class="count-pill" id="tasks-remaining">0 remaining</span></div>
+            <form class="task-form" id="task-form"><input id="task-title" maxlength="200" placeholder="What do you want to get done?" required><button class="primary-button" type="submit">Add task <span>＋</span></button></form>
+            <ul class="task-list" id="task-list"></ul>
+            <p class="empty-state" id="tasks-empty">No tasks yet. Add one small thing to get started.</p>
+          </section>
+          <section class="panel score-panel">
+            <div class="panel-heading"><div><p class="eyebrow">SHOWING UP MATTERS</p><h2>Study score</h2></div><span class="score-spark">✦</span></div>
+            <div class="score-ring" id="score-ring"><strong id="score-value">0</strong><span> / 100</span></div>
+            <h3 id="score-rating">Ready when you are</h3>
+            <p class="muted-copy" id="score-message">Complete a focus session to start your rating.</p>
+            <div class="progress-track"><span id="goal-progress"></span></div>
+            <p class="score-footnote" id="goal-caption">0 of 120 minutes</p>
+            <button class="text-button" data-navigate="reports" type="button">View your study report <span>→</span></button>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-tasks">
+        <section class="panel full-panel">
+          <div class="panel-heading"><div><p class="eyebrow">ONE STEP AT A TIME</p><h2>Your tasks</h2></div><span class="count-pill" id="tasks-count">0 tasks</span></div>
+          <p class="muted-copy section-intro">Add tasks, check them off as you finish, or remove ones you no longer need.</p>
+          <form class="task-form" id="task-form-secondary"><input id="task-title-secondary" maxlength="200" placeholder="Add a task…" required><button class="primary-button" type="submit">Add task <span>＋</span></button></form>
+          <ul class="task-list spacious-list" id="task-list-secondary"></ul>
+          <p class="empty-state" id="tasks-empty-secondary">Your task list is clear.</p>
+        </section>
+      </section>
+
+      <section class="view" id="view-focus">
+        <section class="focus-layout">
+          <article class="focus-hero">
+            <p class="eyebrow light-eyebrow">MAKE ROOM FOR DEEP WORK</p>
+            <h2>Protect your focus.</h2>
+            <p class="focus-description">Choose a session length, put distractions aside, and give one task your attention.</p>
+            <div class="focus-clock" id="focus-clock">25:00</div>
+            <p class="focus-status" id="focus-status">Ready when you are</p>
+            <div class="focus-controls"><label class="duration-control">Session <input id="focus-minutes" type="number" min="1" max="180" value="25"> min</label><button class="focus-button" id="focus-toggle" type="button">Start focus session</button></div>
+          </article>
+          <article class="panel distraction-panel">
+            <div class="panel-heading"><div><p class="eyebrow">CLEAR YOUR HEAD</p><h2>Distraction list</h2></div><span class="optional-pill">Optional</span></div>
+            <p class="muted-copy">Capture anything pulling at your attention, then return to your session.</p>
+            <form class="task-form" id="distraction-form"><input id="distraction-input" maxlength="120" placeholder="e.g. Check social media"><button class="primary-button" type="submit">Add</button></form>
+            <ul class="task-list" id="distraction-list"></ul>
+            <p class="disclaimer">This list is a reminder only. It doesn't block apps or websites.</p>
+          </article>
+        </section>
+      </section>
+
+      <section class="view" id="view-clock">
+        <section class="panel full-panel clock-panel">
+          <div class="panel-heading"><div><p class="eyebrow">YOUR TIME, YOUR PACE</p><h2>Clock tools</h2></div></div>
+          <div class="tab-bar" role="tablist">
+            <button class="clock-tab selected" type="button" data-tab="timer">Timer</button>
+            <button class="clock-tab" type="button" data-tab="stopwatch">Stopwatch</button>
+            <button class="clock-tab" type="button" data-tab="alarm">Alarm</button>
+          </div>
+          <div class="clock-view active" id="clock-timer">
+            <p class="eyebrow">COUNTDOWN TIMER</p><strong class="clock-display" id="timer-display">00:05:00</strong>
+            <div class="timer-fields"><label>Hours<input id="timer-hours" type="number" min="0" max="99" value="0"></label><label>Minutes<input id="timer-minutes" type="number" min="0" max="59" value="5"></label><label>Seconds<input id="timer-seconds" type="number" min="0" max="59" value="0"></label></div>
+            <div class="button-row"><button class="primary-button" id="timer-toggle" type="button">Start timer</button><button class="secondary-button" id="timer-reset" type="button">Reset</button></div><p class="muted-copy" id="timer-status"></p><p class="disclaimer">Keep this browser tab open while the timer runs.</p>
+          </div>
+          <div class="clock-view" id="clock-stopwatch">
+            <p class="eyebrow">STOPWATCH</p><strong class="clock-display" id="stopwatch-display">00:00:00.0</strong>
+            <div class="button-row"><button class="primary-button" id="stopwatch-toggle" type="button">Start</button><button class="secondary-button" id="stopwatch-lap" type="button">Lap</button><button class="secondary-button" id="stopwatch-reset" type="button">Reset</button></div>
+            <ol class="lap-list" id="lap-list"></ol>
+          </div>
+          <div class="clock-view" id="clock-alarm">
+            <p class="eyebrow">ONE-TIME ALARM</p><form class="alarm-form" id="alarm-form"><label>Time<input id="alarm-time" type="time" required></label><label>Label<input id="alarm-label" maxlength="100" placeholder="Study break"></label><button class="primary-button" type="submit">Set alarm</button></form>
+            <ul class="task-list alarm-list" id="alarm-list"></ul><p class="disclaimer">Alarms ring while Focus Desk web app is open in this browser.</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-reports">
+        <section class="panel full-panel">
+          <div class="panel-heading"><div><p class="eyebrow">YOUR ACTUAL STUDY DATA</p><h2>Study reports</h2></div><span class="date-pill" id="report-date"></span></div>
+          <p class="muted-copy section-intro">Reports use completed focus sessions and your task list—no fabricated app-usage estimates.</p>
+          <div class="report-summary"><article><span>FOCUS TIME</span><strong id="report-focus">0m</strong></article><article><span>PRODUCTIVITY SCORE</span><strong id="report-score">0 / 100</strong></article><article><span>TASKS COMPLETE</span><strong id="report-tasks">0 / 0</strong></article></div>
+          <div class="day-chart-section">
+            <div class="day-chart-heading"><h3>Focus across the day</h3><p id="productive-period">No completed focus sessions yet.</p></div>
+            <div class="day-chart" id="day-chart" role="img" aria-label="Hourly focus time across today"></div>
+            <div class="day-chart-axis" aria-hidden="true"><span>12 AM</span><span>3 AM</span><span>6 AM</span><span>9 AM</span><span>12 PM</span><span>3 PM</span><span>6 PM</span><span>9 PM</span></div>
+          </div>
+          <h3 class="list-title">Completed sessions today</h3><ul class="session-list" id="session-list"></ul><p class="empty-state" id="sessions-empty">No completed sessions yet.</p>
+          <p class="disclaimer">Your daily goal can be changed in your profile. Paused and unfinished sessions do not count toward your score.</p>
+        </section>
+      </section>
+
+      <footer class="app-footer"><span>FOCUS DESK</span><span>Your study data is stored by this Focus Desk app.</span></footer>
+    </main>
+  </div>
+
+  <dialog id="profile-dialog" class="modal">
+    <form id="profile-form" method="dialog">
+      <div class="modal-heading"><p class="eyebrow">YOUR SPACE</p><h2>Your profile</h2><p class="muted-copy">Personalize your study space and daily target.</p></div>
+      <label>Name<input id="profile-name-input" maxlength="80" autocomplete="name"></label>
+      <label>Something interesting about you<input id="profile-bio-input" maxlength="160" placeholder="A fact, hobby, or what you're learning"></label>
+      <label>Daily study goal (minutes)<input id="profile-goal-input" type="number" min="1" max="600" required></label>
+      <p class="form-error" id="profile-error"></p>
+      <div class="button-row modal-actions"><button class="secondary-button" value="cancel">Cancel</button><button class="primary-button" id="profile-save" value="default">Save profile</button></div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
