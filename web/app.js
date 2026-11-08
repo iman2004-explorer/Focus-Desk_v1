@@ -488,14 +488,27 @@ if (savedTheme === "dark") {
   document.documentElement.dataset.theme = "dark";
   $("#theme-toggle").textContent = "☀";
 }
-const now = new Date();
-$("#today-date").textContent = now.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
-$("#report-date").textContent = now.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" });
+function updateHeaderDateTime() {
+  const now = new Date();
+  $("#today-date").textContent = now.toLocaleDateString([], {
+    weekday: "short", month: "short", day: "numeric",
+  });
+  $("#current-time").textContent = now.toLocaleTimeString([], {
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+  });
+  $("#current-time").dateTime = now.toISOString();
+}
+
+updateHeaderDateTime();
+$("#report-date").textContent = new Date().toLocaleDateString([], {
+  weekday: "long", month: "long", day: "numeric",
+});
 $("#alarm-time").value = new Date(Date.now() + 60 * 60 * 1000).toTimeString().slice(0, 5);
 setView(location.hash.slice(1) || "dashboard");
 refresh();
 
 setInterval(async () => {
+  updateHeaderDateTime();
   await refresh();
   if (state.focus.running) {
     $("#focus-clock").textContent = formatClock(state.focus.remaining_seconds);

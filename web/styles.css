@@ -61,7 +61,9 @@ h1, h2, h3, p { margin-top: 0; }
 h1 { margin-bottom: 4px; font-size: clamp(27px, 3vw, 36px); letter-spacing: -.04em; line-height: 1.15; }
 .subtitle { margin: 0; color: var(--muted); }
 .topbar-actions { display: flex; align-items: center; gap: 10px; }
+.date-time { display: flex; align-items: center; gap: 8px; }
 .date-pill { display: inline-flex; align-items: center; min-height: 38px; padding: 0 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.current-time { font-variant-numeric: tabular-nums; }
 .icon-button { width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--text); font-size: 16px; }
 .view { display: none; }
 .view.active { display: block; animation: appear .2s ease-out; }
@@ -196,6 +198,7 @@ input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in sr
   .main-content { margin: 0; padding: 24px 16px 14px; }
   .topbar { align-items: flex-start; gap: 10px; margin-bottom: 22px; }
   .topbar-actions { gap: 6px; }
+  .date-time { gap: 4px; }
   .date-pill { min-height: 34px; padding: 0 9px; font-size: 10px; }
   .icon-button { width: 35px; height: 35px; }
   .stat-grid { grid-template-columns: 1fr; gap: 9px; }
