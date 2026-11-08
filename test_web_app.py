@@ -42,6 +42,12 @@ class WebAppTests(unittest.TestCase):
             self.assertEqual(response.status, 200)
             self.assertIn(b"Focus Desk", response.read())
 
+    def test_logo_image_is_served(self):
+        with urlopen(self.base_url + "/logo.png") as response:
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.headers.get_content_type(), "image/png")
+            self.assertTrue(response.read().startswith(b"\x89PNG\r\n\x1a\n"))
+
     def test_tasks_profile_and_distractions_use_saved_backend(self):
         _, created = self.request_json(
             "/api/tasks", "POST", {"title": "Read notes"}

@@ -112,6 +112,8 @@ def create_server(host="127.0.0.1", port=8765, backend=None):
             path = urlparse(self.path).path
             if path == "/":
                 self._send_file("index.html")
+            elif path == "/logo.png":
+                self._send_file("logo.png")
             elif path == "/styles.css":
                 self._send_file("styles.css")
             elif path == "/app.js":
