@@ -1,5 +1,3 @@
-import base64
-import hmac
 import json
 import mimetypes
 import os
@@ -52,7 +50,7 @@ def _app_state(backend):
     }
 
 
-def create_server(host="127.0.0.1", port=8765, backend=None, auth_credentials=None):
+def create_server(host="127.0.0.1", port=8765, backend=None):
     data = backend or FocusBackend()
 
     class RequestHandler(BaseHTTPRequestHandler):
@@ -60,31 +58,6 @@ def create_server(host="127.0.0.1", port=8765, backend=None, auth_credentials=No
 
         def log_message(self, _format, *_args):
             return
-
-        def _authorized(self):
-            credentials = self.server.auth_credentials
-            if credentials is None:
-                return True
-            scheme, separator, token = self.headers.get(
-                "Authorization", ""
-            ).partition(" ")
-            supplied = None
-            if separator and scheme.lower() == "basic":
-                try:
-                    supplied = base64.b64decode(token, validate=True).decode("utf-8")
-                except (ValueError, UnicodeDecodeError):
-                    pass
-            expected = "{}:{}".format(*credentials)
-            if supplied is not None and hmac.compare_digest(supplied, expected):
-                return True
-            self.send_response(401)
-            self.send_header(
-                "WWW-Authenticate", 'Basic realm="Focus Desk", charset="UTF-8"'
-            )
-            self.send_header("Content-Length", "0")
-            self.send_header("Cache-Control", "no-store")
-            self.end_headers()
-            return False
 
         def _send_json(self, payload, status=200):
             content = json.dumps(payload).encode("utf-8")
@@ -136,8 +109,6 @@ def create_server(host="127.0.0.1", port=8765, backend=None, auth_credentials=No
                 self._send_json({"error": "The request could not be completed."}, 500)
 
         def do_GET(self):
-            if not self._authorized():
-                return
             path = urlparse(self.path).path
             if path == "/":
                 self._send_file("index.html")
@@ -154,8 +125,6 @@ def create_server(host="127.0.0.1", port=8765, backend=None, auth_credentials=No
                 self._send_json({"error": "Not found."}, 404)
 
         def do_POST(self):
-            if not self._authorized():
-                return
             path = urlparse(self.path).path
             try:
                 payload = self._read_json()
@@ -210,8 +179,6 @@ def create_server(host="127.0.0.1", port=8765, backend=None, auth_credentials=No
                 self._handle_error(error)
 
         def do_PATCH(self):
-            if not self._authorized():
-                return
             path = urlparse(self.path).path
             task_id = path.removeprefix("/api/tasks/")
             if not task_id or "/" in task_id:
@@ -227,8 +194,6 @@ def create_server(host="127.0.0.1", port=8765, backend=None, auth_credentials=No
                 self._handle_error(error)
 
         def do_DELETE(self):
-            if not self._authorized():
-                return
             path = urlparse(self.path).path
             if path == "/api/distractions":
                 try:
@@ -259,23 +224,14 @@ def create_server(host="127.0.0.1", port=8765, backend=None, auth_credentials=No
                 self._handle_error(error)
 
     server = HTTPServer((host, port), RequestHandler)
-    server.auth_credentials = auth_credentials
     return server
 
 
 def main():
-    auth_user = os.environ.get("FOCUS_AUTH_USER")
-    auth_password = os.environ.get("FOCUS_AUTH_PASSWORD")
-    require_auth = os.environ.get("FOCUS_REQUIRE_AUTH", "false").lower() == "true"
-    if require_auth and (not auth_user or not auth_password):
-        raise RuntimeError(
-            "FOCUS_AUTH_USER and FOCUS_AUTH_PASSWORD are required when auth is enabled."
-        )
-    credentials = (auth_user, auth_password) if auth_user and auth_password else None
     backend = FocusBackend(os.environ.get("FOCUS_DATA_PATH"))
     host = os.environ.get("HOST", "127.0.0.1")
     port = int(os.environ.get("PORT", "8765"))
-    server = create_server(host, port, backend, credentials)
+    server = create_server(host, port, backend)
     address, port = server.server_address
     print("Focus Desk web app: http://{}:{}/".format(address, port))
     print("Press Ctrl+C to stop.")

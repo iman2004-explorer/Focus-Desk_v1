@@ -1,4 +1,3 @@
-import base64
 import json
 import tempfile
 import threading
@@ -40,24 +39,6 @@ class WebAppTests(unittest.TestCase):
 
     def test_static_dashboard_is_served(self):
         with urlopen(self.base_url + "/") as response:
-            self.assertEqual(response.status, 200)
-            self.assertIn(b"Focus Desk", response.read())
-
-    def test_basic_auth_protects_static_and_api_routes(self):
-        self.server.auth_credentials = ("student", "study-time")
-        for path in ("/", "/api/state"):
-            with self.subTest(path=path), self.assertRaises(HTTPError) as error:
-                urlopen(self.base_url + path)
-            self.assertEqual(error.exception.code, 401)
-            self.assertIn("Basic", error.exception.headers["WWW-Authenticate"])
-            error.exception.close()
-
-        token = base64.b64encode(b"student:study-time").decode("ascii")
-        request = Request(
-            self.base_url + "/",
-            headers={"Authorization": "Basic " + token},
-        )
-        with urlopen(request) as response:
             self.assertEqual(response.status, 200)
             self.assertIn(b"Focus Desk", response.read())
 
