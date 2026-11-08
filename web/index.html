@@ -144,8 +144,8 @@
 
   <dialog id="profile-dialog" class="modal">
     <form id="profile-form" method="dialog">
-      <div class="modal-heading"><p class="eyebrow">YOUR SPACE</p><h2>Your profile</h2><p class="muted-copy">Personalize your study space and daily target.</p></div>
-      <label>Name<input id="profile-name-input" maxlength="80" autocomplete="name"></label>
+      <div class="modal-heading"><p class="eyebrow">YOUR SPACE</p><h2>Your profile</h2><p class="muted-copy">Enter your name and choose your daily study goal.</p></div>
+      <label>Your name (required)<input id="profile-name-input" maxlength="80" autocomplete="name" placeholder="Enter your name" required></label>
       <label>Something interesting about you<input id="profile-bio-input" maxlength="160" placeholder="A fact, hobby, or what you're learning"></label>
       <label>Daily study goal (minutes)<input id="profile-goal-input" type="number" min="1" max="600" required></label>
       <p class="form-error" id="profile-error"></p>

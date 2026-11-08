@@ -446,6 +446,10 @@ $("#profile-form").addEventListener("submit", async (event) => {
     const name = $("#profile-name-input").value.trim();
     const bio = $("#profile-bio-input").value.trim();
     const minutes = Number($("#profile-goal-input").value);
+    if (!name) {
+      $("#profile-name-input").focus();
+      throw new Error("Please enter your name before saving your daily goal.");
+    }
     if (!Number.isInteger(minutes) || minutes < 1 || minutes > 600) {
       throw new Error("Daily study goal must be from 1 to 600 minutes.");
     }
